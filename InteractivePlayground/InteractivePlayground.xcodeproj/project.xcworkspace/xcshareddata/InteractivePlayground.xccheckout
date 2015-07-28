@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>98CE86A9-9D1C-4D31-BC9C-8684244C8703</string>
+	<key>IDESourceControlProjectName</key>
+	<string>InteractivePlayground</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>7E804D925461714118DB355C65BC964B41D94376</key>
+		<string>https://github.com/rezaali/ofxUI.git</string>
+		<key>B6187E4F1EE839D600A01C8AF1843B8B51275E7F</key>
+		<string>https://github.com/ReubsP/Interactive-Playground.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>InteractivePlayground/InteractivePlayground.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>7E804D925461714118DB355C65BC964B41D94376</key>
+		<string>../../../../../addons/ofxUI</string>
+		<key>B6187E4F1EE839D600A01C8AF1843B8B51275E7F</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/ReubsP/Interactive-Playground.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>B6187E4F1EE839D600A01C8AF1843B8B51275E7F</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>B6187E4F1EE839D600A01C8AF1843B8B51275E7F</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Interactive-Playground</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>7E804D925461714118DB355C65BC964B41D94376</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ofxUI</string>
+		</dict>
+	</array>
+</dict>
+</plist>

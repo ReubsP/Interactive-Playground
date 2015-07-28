@@ -4,7 +4,8 @@
 void ofApp::setup(){
     makeGrid(ofGetWidth(), ofGetHeight(), 5, 5);
     
-    b.assign(NumBoxes, box());
+    numBoxes = 10;
+    b.assign(numBoxes, box());
     resetBoxes();
 }
 
@@ -15,7 +16,15 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-
+    for (int i = 0; i<b.size(); i++) {
+        b[i].draw();
+    }
+    
+    for (int i = 0; i<gridX.size(); i++){
+        for (int j = 0; j<gridY.size(); j++){
+            ofEllipse(gridX[i], gridY[j], 10, 10);
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -39,6 +48,7 @@ void ofApp::makeGrid(int w, int h, int x, int y){
 void ofApp::resetBoxes(){
     for(int i = 0; i<b.size(); i++){
         b[i].pos.x = gridX[ofRandom(gridX.size())];
+        b[i].pos.y = ofRandom(gridY[0], gridY[gridY.size()]);
     }
 }
 

@@ -3,7 +3,6 @@
 #include "ofMain.h"
 #include "box.h"
 
-#define NumBoxes 8
 
 class ofApp : public ofBaseApp{
     
@@ -25,6 +24,8 @@ public:
     void makeGrid(int w, int h, int x, int y);
     void resetBoxes();
     
+    
+    int numBoxes;
     vector<box> b;
     
     vector<int> gridX;
