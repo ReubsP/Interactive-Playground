@@ -14,7 +14,9 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    for(int i = 0; i<b.size(); i++){
+        b[i].update();
+    }
 }
 
 //--------------------------------------------------------------
@@ -66,14 +68,15 @@ void ofApp::resetBoxes(){
     for(int i = 0; i<b.size(); i++){
         b[i].pos.x = gridX[i/gridX.size()];
         b[i].pos.y = gridY[(i%gridY.size())];
-        b[i].rot = 0;
-        b[i].col = ofColor(ofRandom(255),ofRandom(255),ofRandom(255));
+        b[i].setup();
+        b[i].gridX = gridX;
+        b[i].gridY = gridY;
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    
 }
 
 //--------------------------------------------------------------
@@ -93,12 +96,24 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
+    for(int i = 0; i<b.size(); i++){
+        b[i].selected = false;
+        if(b[i].mouseIn(x,y)){
+            b[i].moving = true;
+            b[i].selected =true;
+            printf("\nmouse In %i", i);
+        }
+    }
 
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-
+    for(int i = 0; i<b.size(); i++){
+        if(b[i].moving){
+            b[i].moving = false;
+        }
+    }
 }
 
 //--------------------------------------------------------------
