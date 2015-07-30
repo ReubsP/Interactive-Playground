@@ -14,6 +14,7 @@ box::box(){
 //----------------------------------------------
 void box::setup(){
     rot = 0;
+    prevRot = rot;
     col = ofColor(ofRandom(255),ofRandom(255),ofRandom(255));
     alpha = 255;
     moving = false;
@@ -64,6 +65,27 @@ void box::update(){
         alpha = 255;
     }
     
+    //rotate
+    if (selected){
+        //set mouse position
+        mouse.set(ofGetAppPtr()->mouseX, ofGetAppPtr()->mouseY);
+        //vector from box position to mouse position
+        posToMouse = pos-mouse;
+        
+        //save the angle between the box and mouse when first selected
+        if(initSelect) initMouseAngle = pos.angle(posToMouse);
+        
+        //rotate by the difference between the initial angle and current angle
+        newRot = pos.angle(posToMouse) - initMouseAngle;
+        //add the rotation to what it was before
+        rot = prevRot + newRot;
+        
+        initSelect = false;
+    }
+    else{
+        prevRot = rot;
+        initSelect = true;
+    }
     
 
 }
@@ -76,7 +98,7 @@ void box::draw(){
     
     ofSetColor(col, alpha);
     ofRect(0, 0, size, size);
-    if(selected){
+    if(selected && !moving){
         ofNoFill();
         ofSetColor(0);
         ofRect(0, 0, size, size);
@@ -90,6 +112,11 @@ void box::draw(){
 //----------------------------------------------
 bool box::mouseIn(int x, int y){
     if(pos.distance(ofVec2f(x, y))<radius) return true;
+    else return false;
+}
+//----------------------------------------------
+bool box::mouseInCentre(int x, int y){
+    if(pos.distance(ofVec2f(x, y))<radius*0.6) return true;
     else return false;
 }
 

@@ -98,11 +98,12 @@ void ofApp::mouseDragged(int x, int y, int button){
 void ofApp::mousePressed(int x, int y, int button){
     for(int i = 0; i<b.size(); i++){
         b[i].selected = false;
-        if(b[i].mouseIn(x,y)){
-            b[i].moving = true;
+        //select the box
+        if(b[i].mouseIn(x,y) && !b[i].mouseInCentre(x, y)){
             b[i].selected =true;
-            printf("\nmouse In %i", i);
         }
+        //move the box from the middle
+        if(b[i].mouseInCentre(x, y)) b[i].moving = true;
     }
 
 }

@@ -18,11 +18,14 @@ public:
     void update();
     void draw();
     bool mouseIn(int x, int y);
+    bool mouseInCentre(int x, int y);
     bool canMoveY(int posx);
     bool canMoveX(int posy);
     
     ofVec2f pos, aim, force, vel;
-    float rot;
+    ofPoint posToMouse, mouse;
+    float rot, prevRot, newRot, initMouseAngle;
+    bool initSelect;
     ofColor col;
     int alpha;
     int size;
