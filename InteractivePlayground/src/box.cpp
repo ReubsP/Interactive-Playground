@@ -21,5 +21,14 @@ void box::update(){
 }
 //----------------------------------------------
 void box::draw(){
-    ofRect(pos, 20, 20);
+    ofPushMatrix();
+    
+    ofTranslate(pos);
+    ofRotateZ(rot);
+    
+    ofSetColor(col);
+    ofRect(0, 0, 50, 50);
+    
+    ofPopMatrix();
+    
 }

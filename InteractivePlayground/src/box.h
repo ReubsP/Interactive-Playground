@@ -19,4 +19,6 @@ public:
     void draw();
     
     ofVec2f pos;
+    float rot;
+    ofColor col;
 };

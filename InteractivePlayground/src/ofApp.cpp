@@ -7,6 +7,9 @@ void ofApp::setup(){
     numBoxes = 10;
     b.assign(numBoxes, box());
     resetBoxes();
+    
+    
+    ofSetRectMode(OF_RECTMODE_CENTER);
 }
 
 //--------------------------------------------------------------
@@ -16,14 +19,28 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    for (int i = 0; i<b.size(); i++) {
-        b[i].draw();
+    
+    
+    //draw grid lines
+    ofSetColor(1);
+    for (int i = 0; i<gridX.size(); i++){
+        ofLine(gridX[i], gridY[0], gridX[i], gridY[gridY.size()-1]);
+    }
+    for (int i = 0; i<gridY.size(); i++){
+        ofLine(gridX[0], gridY[i], gridX[gridX.size()-1], gridY[i]);
     }
     
+    //draw grid points
     for (int i = 0; i<gridX.size(); i++){
         for (int j = 0; j<gridY.size(); j++){
+            ofSetColor(0);
             ofEllipse(gridX[i], gridY[j], 10, 10);
         }
+    }
+    
+    //draw boxes
+    for (int i = 0; i<b.size(); i++) {
+        b[i].draw();
     }
 }
 
@@ -32,8 +49,8 @@ void ofApp::makeGrid(int w, int h, int x, int y){
     gridX.clear();
     gridY.clear();
     
-    float xSpace = w/x;
-    float ySpace = h/y;
+    float xSpace = w/(x+1);
+    float ySpace = h/(y+1);
     
     for(int i=xSpace; i <= w-xSpace; i += xSpace){
         gridX.push_back(i);
@@ -47,8 +64,10 @@ void ofApp::makeGrid(int w, int h, int x, int y){
 //--------------------------------------------------------------
 void ofApp::resetBoxes(){
     for(int i = 0; i<b.size(); i++){
-        b[i].pos.x = gridX[ofRandom(gridX.size())];
-        b[i].pos.y = ofRandom(gridY[0], gridY[gridY.size()]);
+        b[i].pos.x = gridX[i/gridX.size()];
+        b[i].pos.y = gridY[(i%gridY.size())];
+        b[i].rot = 0;
+        b[i].col = ofColor(ofRandom(255),ofRandom(255),ofRandom(255));
     }
 }
 
