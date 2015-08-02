@@ -16,6 +16,16 @@ void ofApp::setup(){
 void ofApp::update(){
     for(int i = 0; i<b.size(); i++){
         b[i].update();
+        //if moving tell other boxes new position
+        if(b[i].moving){
+            for (int j=0; j<b.size(); j++) {
+                b[j].allPos[i] = b[i].pos;
+            }
+        }
+        //int hitNum = b[i].boxHitNum;
+        //if (hitNum > -1){
+            //b[hitNum].hit = true;
+        //}
     }
 }
 
@@ -71,6 +81,12 @@ void ofApp::resetBoxes(){
         b[i].setup();
         b[i].gridX = gridX;
         b[i].gridY = gridY;
+    }
+    for(int i = 0; i<b.size(); i++){
+        //give positions of all boxes
+        for (int j=0; j<b.size(); j++) {
+            b[i].allPos.push_back(b[j].pos);
+        }
     }
 }
 

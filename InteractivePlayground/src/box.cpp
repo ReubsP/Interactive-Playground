@@ -21,6 +21,8 @@ void box::setup(){
     selected = false;
     size = 50;
     radius = ofDist(0,0,size,size)*0.5;
+    //boxHitNum = -1;
+    //hit = false;
     
 
 }
@@ -87,6 +89,21 @@ void box::update(){
         initSelect = true;
     }
     
+    
+    //light
+    lightPos = pos;
+    bool hitBox = false;
+    //boxHitNum = -1;
+    ofVec2f up = ofVec2f(0, -1);
+    while (lightPos.distance(pos)<500 && !hitBox) {
+        lightPos += up.getRotated(rot);
+        for (int i = 0; i<allPos.size(); i++){
+            if(allPos[i].distance(lightPos)<size/2 && allPos[i].distance(pos)>radius){
+                hitBox = true;
+//                boxHitNum = i;
+            }
+        }
+    }
 
 }
 //----------------------------------------------
@@ -107,6 +124,7 @@ void box::draw(){
     }
     ofPopMatrix();
     
+    ofLine(pos, lightPos);
 }
 
 //----------------------------------------------

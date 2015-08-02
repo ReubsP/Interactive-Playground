@@ -35,6 +35,13 @@ public:
     bool selected;
     
     
+    ofVec2f lightPos;
+    //int boxHitNum;
+    //bool hit;
+    
     vector<int> gridX;
     vector<int> gridY;
+    
+    //positions of all boxes
+    vector<ofVec2f> allPos;
 };

@@ -27,7 +27,6 @@ public:
     
     int numBoxes;
     vector<box> b;
-    
     vector<int> gridX;
     vector<int> gridY;
 };
