@@ -9,43 +9,34 @@
 #include "box.h"
 
 box::box(){
-    
-}
-//----------------------------------------------
-void box::setup(){
     rot = 0;
     prevRot = rot;
-    col = ofColor(ofRandom(255),ofRandom(255),ofRandom(255));
     alpha = 255;
     moving = false;
     selected = false;
-    size = 50;
+    rotating = false;
+    size = 640*scaleSize;
     radius = ofDist(0,0,size,size)*0.5;
-    //boxHitNum = -1;
-    //hit = false;
-    
+    beams = 5;
+}
 
+
+//----------------------------------------------
+void box::setup(){
+    col = ofColor(ofRandom(255),ofRandom(255),ofRandom(255));
+    for (int i=0; i<beams; i++){
+        lightBeams.push_back(pos);
+    }
 }
 //----------------------------------------------
 void box::update(){
     if(moving){
         
         aim.set(ofGetAppPtr()->mouseX, ofGetAppPtr()->mouseY);
-        //ofPoint attractPt(ofGetMouseX(), ofGetMouseY(), 0);
-        force = aim-pos; // we get the attraction force/vector by looking at the mouse pos relative to our pos
         
         
-        //float dist = force.length();
-        
-        //force.normalize(); //by normalizing we disregard how close the particle is to the attraction point
-        
-        
-        vel *= 0.6; //apply drag
-        vel += force; //apply force
-        
-        if(canMoveY(pos.x)) pos.y += vel.y;
-        if(canMoveX(pos.y)) pos.x += vel.x;
-        
+        if(canMoveY(pos.x)) pos.y = aim.y;
+        if(canMoveX(pos.y)) pos.x = aim.x;
         
         //keep on grid
         if (pos.x < gridX[0]) {
@@ -68,42 +59,77 @@ void box::update(){
     }
     
     //rotate
-    if (selected){
+    if (rotating){
         //set mouse position
         mouse.set(ofGetAppPtr()->mouseX, ofGetAppPtr()->mouseY);
         //vector from box position to mouse position
         posToMouse = pos-mouse;
         
         //save the angle between the box and mouse when first selected
-        if(initSelect) initMouseAngle = pos.angle(posToMouse);
+        if(initRotating) initMouseAngle = pos.angle(posToMouse);
         
         //rotate by the difference between the initial angle and current angle
         newRot = pos.angle(posToMouse) - initMouseAngle;
         //add the rotation to what it was before
         rot = prevRot + newRot;
         
-        initSelect = false;
+        initRotating = false;
     }
     else{
         prevRot = rot;
-        initSelect = true;
+        initRotating = true;
     }
+    
+    
+    
     
     
     //light
-    lightPos = pos;
-    bool hitBox = false;
-    //boxHitNum = -1;
-    ofVec2f up = ofVec2f(0, -1);
-    while (lightPos.distance(pos)<500 && !hitBox) {
-        lightPos += up.getRotated(rot);
-        for (int i = 0; i<allPos.size(); i++){
-            if(allPos[i].distance(lightPos)<size/2 && allPos[i].distance(pos)>radius){
-                hitBox = true;
-//                boxHitNum = i;
+    for (int i=0; i<lightBeams.size(); i++) {
+        lightBeams[i] = pos;
+        bool hitBox = false;
+        
+        //make "up" direction for rotation reference
+        ofVec2f up = ofVec2f(0, -1);
+        //find direction of light beam
+        ofVec2f lightRot = up.getRotated(rot+i*3-(lightBeams.size()*1.5));
+        
+        //while the light is less than 500 away and it hasn't hit a box...
+        while (lightBeams[i].distance(pos)<1000*scaleSize && !hitBox) {
+            //light travels in the direction set by the box's rotation
+            lightBeams[i] += lightRot;
+            
+            //check the positions of all the boxes
+            for (int i = 0; i<allPos.size(); i++){
+                //if the light is close to a box that isn't it's source
+                if(allPos[i].distance(lightBeams[i])<size/2 && allPos[i].distance(pos)>radius){
+                    hitBox = true;    //it has hit a box (stop the light going further)
+                    //boxHitNum = i;    //ofApp uses this to tell a box that it has been hit
+                }
             }
         }
     }
+//    lightPos = pos;        //starts at box position
+//    bool hitBox = false;   //hasn't hit a box
+//    //boxHitNum = -1;        //-1 references no boxes to be rendered as hit
+//    
+//    //make "up" direction for rotation reference
+//    ofVec2f up = ofVec2f(0, -1);
+//    
+//    //while the light is less than 500 away and it hasn't hit a box...
+//    while (lightPos.distance(pos)<1000*scaleSize && !hitBox) {
+//        //light travels in the direction set by the box's rotation
+//        lightPos += up.getRotated(rot);
+//        
+//        //check the positions of all the boxes
+//        for (int i = 0; i<allPos.size(); i++){
+//            //if the light is close to a box that isn't it's source
+//            if(allPos[i].distance(lightPos)<size/2 && allPos[i].distance(pos)>radius){
+//                hitBox = true;    //it has hit a box (stop the light going further)
+//                //boxHitNum = i;    //ofApp uses this to tell a box that it has been hit
+//            }
+//        }
+//    }
 
 }
 //----------------------------------------------
@@ -115,7 +141,7 @@ void box::draw(){
     
     ofSetColor(col, alpha);
     ofRect(0, 0, size, size);
-    if(selected && !moving){
+    if(selected){
         ofNoFill();
         ofSetColor(0);
         ofRect(0, 0, size, size);
@@ -124,7 +150,13 @@ void box::draw(){
     }
     ofPopMatrix();
     
-    ofLine(pos, lightPos);
+    ofSetColor(255);
+    ofSetLineWidth(5);
+    for (int i=0; i<lightBeams.size(); i++){
+        ofLine(pos, lightBeams[i]);
+    }
+
+    ofSetLineWidth(1);
 }
 
 //----------------------------------------------
@@ -144,7 +176,8 @@ bool box::canMoveY(int posx){
     for(int i=0; i<gridX.size(); i++){
         //if distance between box pos and grid pos is small
         //and it's not at the top or bottom
-        if (ABS(posx-gridX[i]) < 2) {
+        if (ABS(posx-gridX[i]) < 3) {
+            pos.x = gridX[i];
             canMove = true;
         }
     }
@@ -155,9 +188,11 @@ bool box::canMoveY(int posx){
 bool box::canMoveX(int posy){
     bool canMove = false;
     for(int i=0; i<gridY.size(); i++){
-        if (ABS(posy-gridY[i]) < 2) {
+        if (ABS(posy-gridY[i]) < 3) {
+            pos.y = gridY[i];
             canMove = true;
         }
     }
     return canMove;
 }
+

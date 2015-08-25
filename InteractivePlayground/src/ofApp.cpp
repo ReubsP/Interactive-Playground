@@ -2,14 +2,21 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    makeGrid(ofGetWidth(), ofGetHeight(), 5, 5);
+    makeGrid(1250*scaleSize*4, 1250*scaleSize*4, 4, 4);
     
-    numBoxes = 10;
     b.assign(numBoxes, box());
+//    for (int i=0; i<numBoxes; i++) {
+//        b.push_back(box());
+//    }
+    
     resetBoxes();
     
-    
     ofSetRectMode(OF_RECTMODE_CENTER);
+    
+    ofSetFrameRate(60);
+    
+
+
 }
 
 //--------------------------------------------------------------
@@ -23,7 +30,7 @@ void ofApp::update(){
             }
         }
         //int hitNum = b[i].boxHitNum;
-        //if (hitNum > -1){
+        //if (hitNum >= 0){
             //b[hitNum].hit = true;
         //}
     }
@@ -115,8 +122,12 @@ void ofApp::mousePressed(int x, int y, int button){
     for(int i = 0; i<b.size(); i++){
         b[i].selected = false;
         //select the box
-        if(b[i].mouseIn(x,y) && !b[i].mouseInCentre(x, y)){
+        if(b[i].mouseIn(x,y)){
             b[i].selected =true;
+        }
+        //rotate the box
+        if(b[i].mouseIn(x,y) && !b[i].mouseInCentre(x, y)){
+            b[i].rotating =true;
         }
         //move the box from the middle
         if(b[i].mouseInCentre(x, y)) b[i].moving = true;
@@ -129,6 +140,9 @@ void ofApp::mouseReleased(int x, int y, int button){
     for(int i = 0; i<b.size(); i++){
         if(b[i].moving){
             b[i].moving = false;
+        }
+        if(b[i].rotating){
+            b[i].rotating = false;
         }
     }
 }
@@ -147,3 +161,11 @@ void ofApp::gotMessage(ofMessage msg){
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
 }
+
+//--------------------------------------------------------------
+void ofApp::exit() {
+    b.clear();
+}
+
+
+
